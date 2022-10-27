@@ -24,44 +24,46 @@ if uploaded_file is not None:
     # Read file
     df = pd.read_csv(uploaded_file, sep="\t", skiprows=9)
 
-if st.session_state.choice_sensor == "CO2":
-    # Name columns
-    df.columns = ["Time", "Time2", "CO2", "Temp", "Humidity"]
-
-    # Filter the relevant data for CO2
-    df = df[["CO2", "Temp", "Humidity"]]
-
-    # Load the prediction model
-    if st.session_state.choice_method == "Klassifikation":
-        scaler = joblib.load(open('./model/scaler_rf_co2.gz', 'rb'))
-        model = joblib.load(open('./model/rf_co2.gz', 'rb'))
-    elif st.session_state.choice_method == "Regression":
-        scaler = joblib.load(open('./model/scaler_rf_reg_co2.gz', 'rb'))
-        model = joblib.load(open('./model/rf_reg_co2.gz', 'rb'))
-    else:
-        st.markdown("Modeltyp was not selected")
-
-elif st.session_state.choice_sensor == "VOC":
-    # Name columns
-    df.columns = ["Time", "Time2", "Humidity", "Temp", "Index_VOC", "Humidity2", "Temp2", "VOC"]
-
-    # Filter the relevant data for CO2
-    df = df[["Humidity", "Temp", "VOC"]]
-
-    # Load the prediction model
-    if st.session_state.choice_method == "Klassifikation":
-        scaler = joblib.load(open('./model/scaler_rf_voc.gz', 'rb'))
-        model = joblib.load(open('./model/rf_voc.gz', 'rb'))
-    elif st.session_state.choice_method == "Regression":
-        scaler = joblib.load(open('./model/scaler_rf_reg_voc.gz', 'rb'))
-        model = joblib.load(open('./model/rf_reg_voc.gz', 'rb'))
-    else:
-        st.markdown("Modeltyp was not selected")
 
 
 start_prognose = st.button("Starte Vorhersage")
 # Prognose
 if start_prognose:
+
+    if st.session_state.choice_sensor == "CO2":
+        # Name columns
+        df.columns = ["Time", "Time2", "CO2", "Temp", "Humidity"]
+
+        # Filter the relevant data for CO2
+        df = df[["CO2", "Temp", "Humidity"]]
+
+        # Load the prediction model
+        if st.session_state.choice_method == "Klassifikation":
+            scaler = joblib.load(open('./model/scaler_rf_co2.gz', 'rb'))
+            model = joblib.load(open('./model/rf_co2.gz', 'rb'))
+        elif st.session_state.choice_method == "Regression":
+            scaler = joblib.load(open('./model/scaler_rf_reg_co2.gz', 'rb'))
+            model = joblib.load(open('./model/rf_reg_co2.gz', 'rb'))
+        else:
+            st.markdown("Modeltyp was not selected")
+
+    elif st.session_state.choice_sensor == "VOC":
+        # Name columns
+        df.columns = ["Time", "Time2", "Humidity", "Temp", "Index_VOC", "Humidity2", "Temp2", "VOC"]
+
+        # Filter the relevant data for CO2
+        df = df[["Humidity", "Temp", "VOC"]]
+
+        # Load the prediction model
+        if st.session_state.choice_method == "Klassifikation":
+            scaler = joblib.load(open('./model/scaler_rf_voc.gz', 'rb'))
+            model = joblib.load(open('./model/rf_voc.gz', 'rb'))
+        elif st.session_state.choice_method == "Regression":
+            scaler = joblib.load(open('./model/scaler_rf_reg_voc.gz', 'rb'))
+            model = joblib.load(open('./model/rf_reg_voc.gz', 'rb'))
+        else:
+            st.markdown("Modeltyp was not selected")
+
     # Get last values
     current_data = df.tail(1)
 
