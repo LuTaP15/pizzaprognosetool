@@ -25,12 +25,11 @@ if uploaded_file is not None:
     df = pd.read_csv(uploaded_file, sep="\t", skiprows=9)
 
 
-
 start_prognose = st.button("Starte Vorhersage")
 # Prognose
 if start_prognose:
 
-    if st.session_state.choice_sensor == "CO2":
+    if st.session_state.choice_sensor == "CO2" and len(df.columns)==5:
         # Name columns
         df.columns = ["Time", "Time2", "CO2", "Temp", "Humidity"]
 
@@ -47,7 +46,7 @@ if start_prognose:
         else:
             st.markdown("Modeltyp was not selected")
 
-    elif st.session_state.choice_sensor == "VOC":
+    elif st.session_state.choice_sensor == "VOC" and len(df.columns)==8:
         # Name columns
         df.columns = ["Time", "Time2", "Humidity", "Temp", "Index_VOC", "Humidity2", "Temp2", "VOC"]
 
@@ -63,6 +62,8 @@ if start_prognose:
             model = joblib.load(open('./models/rf_reg_voc.gz', 'rb'))
         else:
             st.markdown("Modeltyp was not selected")
+    else:
+        st.markdown("Falsche Sensordaten!")
 
     # Get last values
     current_data = df.tail(1)
@@ -79,12 +80,12 @@ if start_prognose:
     # Display the result
     if st.session_state.choice_method == "Klassifikation":
         st.markdown("The possible outcomes are: E for eatable, N for not eatable and U for undefined!")
-        st.write(prediction)
+        st.write(prediction.values)
     elif st.session_state.choice_method == "Regression":
         st.markdown("The outcome is the amount of days relative to the best-before-date. "
               "E.g. 7 means you have 7 days before expiring. "
               "-1 means you are already 1 day over the expiration. ")
-        st.write(prediction)
+        st.write(prediction.values)
     else:
         st.markdown("Modeltyp was not selected")
 
