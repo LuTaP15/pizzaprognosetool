@@ -23,11 +23,11 @@ def prognose(df, choice_sensor, choice_method):
 
         # Load the prediction model
         if choice_method == "Klassifikation":
-            scaler = joblib.load('./models/scaler_rf_co2.gz', 'rb')
-            model = joblib.load('./models/rf_co2.gz', 'rb')
+            scaler = joblib.load('./models/scaler_rf_co2.gz')
+            model = joblib.load('./models/rf_co2.gz')
         elif choice_method == "Regression":
-            scaler = joblib.load('./models/scaler_rf_reg_co2.gz', 'rb')
-            model = joblib.load('./models/rf_reg_co2.gz', 'rb')
+            scaler = joblib.load('./models/scaler_rf_reg_co2.gz')
+            model = joblib.load('./models/rf_reg_co2.gz')
         else:
             st.markdown("Modeltyp was not selected")
 
@@ -40,11 +40,11 @@ def prognose(df, choice_sensor, choice_method):
 
         # Load the prediction model
         if choice_method == "Klassifikation":
-            scaler = joblib.load('./models/scaler_rf_voc.gz', 'rb')
-            model = joblib.load('./models/rf_voc.gz', 'rb')
+            scaler = joblib.load('./models/scaler_rf_voc.gz')
+            model = joblib.load('./models/rf_voc.gz')
         elif choice_method == "Regression":
-            scaler = joblib.load('./models/scaler_rf_reg_voc.gz', 'rb')
-            model = joblib.load('./models/rf_reg_voc.gz', 'rb')
+            scaler = joblib.load('./models/scaler_rf_reg_voc.gz')
+            model = joblib.load('./models/rf_reg_voc.gz')
         else:
             st.markdown("Modeltyp was not selected")
     else:
