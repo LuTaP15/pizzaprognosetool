@@ -110,7 +110,7 @@ start_prognose = st.button("Starte Vorhersage")
 if start_prognose:
 
     # Use model for prediction
-    prediction = prognose(df, st.session_state.choice_sensor, st.session_state.choice_method)
+    prediction = prognose(df, choice_sensor, choice_method)
 
     # Display the result
     if choice_method == "Classification":
