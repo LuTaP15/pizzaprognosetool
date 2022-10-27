@@ -93,10 +93,10 @@ st.markdown("Vorhersagetool für die Bestimmung der Haltbarkeit von Pizza. "
             "Zur Auswahl steht eine simple Klassifikation oder eine Regression für die Vorhersage."
             )
 
-st.session_state.choice_sensor = st.radio("Welchen Sensor wollen Sie verwenden?",
+choice_sensor = st.radio("Welchen Sensor wollen Sie verwenden?",
                       ("CO2 Sensor", "VOC Sensor"), index=0)
 
-st.session_state.choice_method = st.radio("Welches Verfahren wollen Sie verwenden?",
+choice_method = st.radio("Welches Verfahren wollen Sie verwenden?",
                       ("Klassifikation", "Regression"), index=0)
 
 uploaded_file = st.file_uploader("Wählen Sie Ihre Daten aus!")
@@ -113,10 +113,10 @@ if start_prognose:
     prediction = prognose(df, st.session_state.choice_sensor, st.session_state.choice_method)
 
     # Display the result
-    if st.session_state.choice_method == "Classification":
+    if choice_method == "Classification":
         st.markdown("The possible outcomes are: E for eatable, N for not eatable and U for undefined!")
         st.write(prediction)
-    elif st.session_state.choice_method == "Regression":
+    elif choice_method == "Regression":
         st.markdown("The outcome is the amount of days relative to the best-before-date. "
               "E.g. 7 means you have 7 days before expiring. "
               "-1 means you are already 1 day over the expiration. ")
