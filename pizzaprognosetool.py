@@ -38,11 +38,11 @@ if st.session_state.choice_sensor == "CO2":
 
     # Load the prediction model
     if st.session_state.choice_method == "Klassifikation":
-        st.session_state.scaler = joblib.load(open('./model/scaler_rf_co2.gz', 'rb'))
-        st.session_state.model = joblib.load(open('./model/rf_co2.gz', 'rb'))
+        st.session_state.scaler = joblib.load(open('./models/scaler_rf_co2.gz', 'rb'))
+        st.session_state.model = joblib.load(open('./models/rf_co2.gz', 'rb'))
     elif st.session_state.choice_method == "Regression":
-        st.session_state.scaler = joblib.load(open('./model/scaler_rf_reg_co2.gz', 'rb'))
-        st.session_state.model = joblib.load(open('./model/rf_reg_co2.gz', 'rb'))
+        st.session_state.scaler = joblib.load(open('./models/scaler_rf_reg_co2.gz', 'rb'))
+        st.session_state.model = joblib.load(open('./models/rf_reg_co2.gz', 'rb'))
     else:
         st.markdown("Modeltyp was not selected")
 
@@ -55,11 +55,11 @@ elif st.session_state.choice_sensor == "VOC":
 
     # Load the prediction model
     if st.session_state.choice_method == "Klassifikation":
-        st.session_state.scaler = joblib.load(open('./model/scaler_rf_voc.gz', 'rb'))
-        st.session_state.model = joblib.load(open('./model/rf_voc.gz', 'rb'))
+        st.session_state.scaler = joblib.load(open('./models/scaler_rf_voc.gz', 'rb'))
+        st.session_state.model = joblib.load(open('./models/rf_voc.gz', 'rb'))
     elif st.session_state.choice_method == "Regression":
-        st.session_state.scaler = joblib.load(open('./model/scaler_rf_reg_voc.gz', 'rb'))
-        st.session_state.model = joblib.load(open('./model/rf_reg_voc.gz', 'rb'))
+        st.session_state.scaler = joblib.load(open('./models/scaler_rf_reg_voc.gz', 'rb'))
+        st.session_state.model = joblib.load(open('./models/rf_reg_voc.gz', 'rb'))
     else:
         st.markdown("Modeltyp was not selected")
 
