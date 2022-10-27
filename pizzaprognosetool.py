@@ -21,13 +21,31 @@ def prognose(df, choice_sensor, choice_method):
         # Filter the relevant data for CO2
         df = df[["CO2", "Temp", "Humidity"]]
 
+        scaler = joblib.load(open('./models/scaler_rf_voc.gz', 'rb'))
+        model = joblib.load(open('./models/rf_voc.gz', 'rb'))
+
+        # Get last values
+        current_data = df.tail(1)
+
+        # Fit current data with scaler from the model
+        try:
+            scaler.fit(current_data)
+        except:
+            st.markdown("Scaler is missing!")
+
+        # Use model for prediction
+        prediction = model.predict(current_data)
+        return prediction
+
+""":arg
+
         # Load the prediction model
         if choice_method == "Klassifikation":
-            scaler = joblib.load('./models/scaler_rf_co2.gz')
-            model = joblib.load('./models/rf_co2.gz')
+            scaler = joblib.load(open('./models/scaler_rf_co2.gz', 'rb'))
+            model = joblib.load(open('./models/rf_co2.gz', 'rb'))
         elif choice_method == "Regression":
-            scaler = joblib.load('./models/scaler_rf_reg_co2.gz')
-            model = joblib.load('./models/rf_reg_co2.gz')
+            scaler = joblib.load(open('./models/scaler_rf_reg_co2.gz', 'rb'))
+            model = joblib.load(open('./models/rf_reg_co2.gz', 'rb'))
         else:
             st.markdown("Modeltyp was not selected")
 
@@ -40,11 +58,11 @@ def prognose(df, choice_sensor, choice_method):
 
         # Load the prediction model
         if choice_method == "Klassifikation":
-            scaler = joblib.load('./models/scaler_rf_voc.gz')
-            model = joblib.load('./models/rf_voc.gz')
+            scaler = joblib.load(open('./models/scaler_rf_voc.gz', 'rb'))
+            model = joblib.load(open('./models/rf_voc.gz', 'rb'))
         elif choice_method == "Regression":
-            scaler = joblib.load('./models/scaler_rf_reg_voc.gz')
-            model = joblib.load('./models/rf_reg_voc.gz')
+            scaler = joblib.load(open('./models/scaler_rf_reg_voc.gz', 'rb'))
+            model = joblib.load(open('./models/rf_reg_voc.gz', 'rb'))
         else:
             st.markdown("Modeltyp was not selected")
     else:
@@ -62,7 +80,7 @@ def prognose(df, choice_sensor, choice_method):
     # Use model for prediction
     prediction = model.predict(current_data)
     return prediction
-
+"""
 
 
 ####################################################################################################
