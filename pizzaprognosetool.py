@@ -80,12 +80,12 @@ if start_prognose:
     # Display the result
     if st.session_state.choice_method == "Klassifikation":
         st.markdown("The possible outcomes are: E for eatable, N for not eatable and U for undefined!")
-        st.write(prediction.values)
+        st.write(prediction.item(0))
     elif st.session_state.choice_method == "Regression":
         st.markdown("The outcome is the amount of days relative to the best-before-date. "
               "E.g. 7 means you have 7 days before expiring. "
               "-1 means you are already 1 day over the expiration. ")
-        st.write(prediction.values)
+        st.write(prediction.item(0))
     else:
         st.markdown("Modeltyp was not selected")
 
