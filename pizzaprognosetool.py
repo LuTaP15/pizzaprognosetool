@@ -10,31 +10,6 @@ import pickle
 import joblib
 
 ####################################################################################################
-# Funktionen
-
-
-def prognose(df, choice_sensor, choice_method):
-        # Name columns
-        df.columns = ["Time", "Time2", "CO2", "Temp", "Humidity"]
-
-        # Filter the relevant data for CO2
-        df = df[["CO2", "Temp", "Humidity"]]
-
-        scaler = joblib.load(open('./models/scaler_rf_voc.gz', 'rb'))
-        model = joblib.load(open('./models/rf_voc.gz', 'rb'))
-
-        # Get last values
-        current_data = df.tail(1)
-
-        # Fit current data with scaler from the model
-        try:
-            scaler.fit(current_data)
-        except:
-            st.markdown("Scaler is missing!")
-
-        # Use model for prediction
-        prediction = model.predict(current_data)
-        return prediction
 
 """:arg
 
@@ -107,9 +82,25 @@ if uploaded_file is not None:
 start_prognose = st.button("Starte Vorhersage")
 # Prognose
 if start_prognose:
+    df.columns = ["Time", "Time2", "CO2", "Temp", "Humidity"]
+
+    # Filter the relevant data for CO2
+    df = df[["CO2", "Temp", "Humidity"]]
+
+    scaler = joblib.load(open('./models/scaler_rf_voc.gz', 'rb'))
+    model = joblib.load(open('./models/rf_voc.gz', 'rb'))
+
+    # Get last values
+    current_data = df.tail(1)
+
+    # Fit current data with scaler from the model
+    try:
+        scaler.fit(current_data)
+    except:
+        st.markdown("Scaler is missing!")
 
     # Use model for prediction
-    prediction = prognose(df, choice_sensor, choice_method)
+    prediction = model.predict(current_data)
 
     # Display the result
     if choice_method == "Classification":
