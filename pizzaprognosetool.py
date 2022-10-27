@@ -38,11 +38,11 @@ if st.session_state.choice_sensor == "CO2":
 
     # Load the prediction model
     if st.session_state.choice_method == "Klassifikation":
-        scaler = joblib.load(open('./model/scaler_rf_co2.gz', 'rb'))
-        model = joblib.load(open('./model/rf_co2.gz', 'rb'))
+        st.session_state.scaler = joblib.load(open('./model/scaler_rf_co2.gz', 'rb'))
+        st.session_state.model = joblib.load(open('./model/rf_co2.gz', 'rb'))
     elif st.session_state.choice_method == "Regression":
-        scaler = joblib.load(open('./model/scaler_rf_reg_co2.gz', 'rb'))
-        model = joblib.load(open('./model/rf_reg_co2.gz', 'rb'))
+        st.session_state.scaler = joblib.load(open('./model/scaler_rf_reg_co2.gz', 'rb'))
+        st.session_state.model = joblib.load(open('./model/rf_reg_co2.gz', 'rb'))
     else:
         st.markdown("Modeltyp was not selected")
 
@@ -55,11 +55,11 @@ elif st.session_state.choice_sensor == "VOC":
 
     # Load the prediction model
     if st.session_state.choice_method == "Klassifikation":
-        scaler = joblib.load(open('./model/scaler_rf_voc.gz', 'rb'))
-        model = joblib.load(open('./model/rf_voc.gz', 'rb'))
+        st.session_state.scaler = joblib.load(open('./model/scaler_rf_voc.gz', 'rb'))
+        st.session_state.model = joblib.load(open('./model/rf_voc.gz', 'rb'))
     elif st.session_state.choice_method == "Regression":
-        scaler = joblib.load(open('./model/scaler_rf_reg_voc.gz', 'rb'))
-        model = joblib.load(open('./model/rf_reg_voc.gz', 'rb'))
+        st.session_state.scaler = joblib.load(open('./model/scaler_rf_reg_voc.gz', 'rb'))
+        st.session_state.model = joblib.load(open('./model/rf_reg_voc.gz', 'rb'))
     else:
         st.markdown("Modeltyp was not selected")
 
@@ -72,12 +72,12 @@ if start_prognose:
 
     # Fit current data with scaler from the model
     try:
-        scaler.fit(current_data)
+        st.session_state.scaler.fit(current_data)
     except:
         st.markdown("Scaler is missing!")
 
     # Use model for prediction
-    prediction = model.predict(current_data)
+    prediction = st.session_state.model.predict(current_data)
 
     # Display the result
     if st.session_state.choice_method == "Classification":
