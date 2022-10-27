@@ -13,7 +13,7 @@ import joblib
 # Funktionen
 
 
-def prognose(df):
+def prognose(df, choice_sensor, choice_method):
     if st.session_state.choice_sensor == "CO2":
         # Name columns
         df.columns = ["Time", "Time2", "CO2", "Temp", "Humidity"]
@@ -22,27 +22,28 @@ def prognose(df):
         df = df[["CO2", "Temp", "Humidity"]]
 
         # Load the prediction model
-        if st.session_state.choice_method == "Klassifikation":
+        if choice_method == "Klassifikation":
             scaler = joblib.load(open('./models/scaler_rf_co2.gz', 'rb'))
             model = joblib.load(open('./models/rf_co2.gz', 'rb'))
-        elif st.session_state.choice_method == "Regression":
+        elif choice_method == "Regression":
             scaler = joblib.load(open('./models/scaler_rf_reg_co2.gz', 'rb'))
             model = joblib.load(open('./models/rf_reg_co2.gz', 'rb'))
         else:
             st.markdown("Modeltyp was not selected")
 
-    elif st.session_state.choice_sensor == "VOC":
+    elif choice_sensor == "VOC":
         # Name columns
         df.columns = ["Time", "Time2", "Humidity", "Temp", "Index_VOC", "Humidity2", "Temp2", "VOC"]
+        print("I was here!!!!!")
 
         # Filter the relevant data for CO2
         df = df[["Humidity", "Temp", "VOC"]]
 
         # Load the prediction model
-        if st.session_state.choice_method == "Klassifikation":
+        if choice_method == "Klassifikation":
             scaler = joblib.load(open('./models/scaler_rf_voc.gz', 'rb'))
             model = joblib.load(open('./models/rf_voc.gz', 'rb'))
-        elif st.session_state.choice_method == "Regression":
+        elif choice_method == "Regression":
             scaler = joblib.load(open('./models/scaler_rf_reg_voc.gz', 'rb'))
             model = joblib.load(open('./models/rf_reg_voc.gz', 'rb'))
         else:
@@ -59,7 +60,6 @@ def prognose(df):
 
     # Use model for prediction
     prediction = model.predict(current_data)
-
     return prediction
 
 
@@ -91,7 +91,7 @@ start_prognose = st.button("Starte Vorhersage")
 if start_prognose:
 
     # Use model for prediction
-    prediction = prognose(df)
+    prediction = prognose(df, st.session_state.choice_sensor, st.session_state.choice_method)
 
     # Display the result
     if st.session_state.choice_method == "Classification":
