@@ -9,6 +9,62 @@ import pandas as pd
 import pickle
 import joblib
 
+####################################################################################################
+# Funktionen
+
+
+def prognose(df):
+    if st.session_state.choice_sensor == "CO2":
+        # Name columns
+        df.columns = ["Time", "Time2", "CO2", "Temp", "Humidity"]
+
+        # Filter the relevant data for CO2
+        df = df[["CO2", "Temp", "Humidity"]]
+
+        # Load the prediction model
+        if st.session_state.choice_method == "Klassifikation":
+            st.session_state.scaler = joblib.load(open('./models/scaler_rf_co2.gz', 'rb'))
+            st.session_state.model = joblib.load(open('./models/rf_co2.gz', 'rb'))
+        elif st.session_state.choice_method == "Regression":
+            st.session_state.scaler = joblib.load(open('./models/scaler_rf_reg_co2.gz', 'rb'))
+            st.session_state.model = joblib.load(open('./models/rf_reg_co2.gz', 'rb'))
+        else:
+            st.markdown("Modeltyp was not selected")
+
+    elif st.session_state.choice_sensor == "VOC":
+        # Name columns
+        df.columns = ["Time", "Time2", "Humidity", "Temp", "Index_VOC", "Humidity2", "Temp2", "VOC"]
+
+        # Filter the relevant data for CO2
+        df = df[["Humidity", "Temp", "VOC"]]
+
+        # Load the prediction model
+        if st.session_state.choice_method == "Klassifikation":
+            st.session_state.scaler = joblib.load(open('./models/scaler_rf_voc.gz', 'rb'))
+            st.session_state.model = joblib.load(open('./models/rf_voc.gz', 'rb'))
+        elif st.session_state.choice_method == "Regression":
+            st.session_state.scaler = joblib.load(open('./models/scaler_rf_reg_voc.gz', 'rb'))
+            st.session_state.model = joblib.load(open('./models/rf_reg_voc.gz', 'rb'))
+        else:
+            st.markdown("Modeltyp was not selected")
+
+    # Get last values
+    current_data = df.tail(1)
+
+    # Fit current data with scaler from the model
+    try:
+        st.session_state.scaler.fit(current_data)
+    except:
+        st.markdown("Scaler is missing!")
+
+    # Use model for prediction
+    prediction = st.session_state.model.predict(current_data)
+
+    return prediction
+
+
+
+####################################################################################################
 
 st.title("Vorhersagetool")
 st.markdown("### Einleitung")
@@ -29,55 +85,13 @@ if uploaded_file is not None:
     # Read file
     df = pd.read_csv(uploaded_file, sep="\t", skiprows=9)
 
-if st.session_state.choice_sensor == "CO2":
-    # Name columns
-    df.columns = ["Time", "Time2", "CO2", "Temp", "Humidity"]
-
-    # Filter the relevant data for CO2
-    df = df[["CO2", "Temp", "Humidity"]]
-
-    # Load the prediction model
-    if st.session_state.choice_method == "Klassifikation":
-        st.session_state.scaler = joblib.load(open('./models/scaler_rf_co2.gz', 'rb'))
-        st.session_state.model = joblib.load(open('./models/rf_co2.gz', 'rb'))
-    elif st.session_state.choice_method == "Regression":
-        st.session_state.scaler = joblib.load(open('./models/scaler_rf_reg_co2.gz', 'rb'))
-        st.session_state.model = joblib.load(open('./models/rf_reg_co2.gz', 'rb'))
-    else:
-        st.markdown("Modeltyp was not selected")
-
-elif st.session_state.choice_sensor == "VOC":
-    # Name columns
-    df.columns = ["Time", "Time2", "Humidity", "Temp", "Index_VOC", "Humidity2", "Temp2", "VOC"]
-
-    # Filter the relevant data for CO2
-    df = df[["Humidity", "Temp", "VOC"]]
-
-    # Load the prediction model
-    if st.session_state.choice_method == "Klassifikation":
-        st.session_state.scaler = joblib.load(open('./models/scaler_rf_voc.gz', 'rb'))
-        st.session_state.model = joblib.load(open('./models/rf_voc.gz', 'rb'))
-    elif st.session_state.choice_method == "Regression":
-        st.session_state.scaler = joblib.load(open('./models/scaler_rf_reg_voc.gz', 'rb'))
-        st.session_state.model = joblib.load(open('./models/rf_reg_voc.gz', 'rb'))
-    else:
-        st.markdown("Modeltyp was not selected")
-
 
 start_prognose = st.button("Starte Vorhersage")
 # Prognose
 if start_prognose:
-    # Get last values
-    current_data = df.tail(1)
-
-    # Fit current data with scaler from the model
-    try:
-        st.session_state.scaler.fit(current_data)
-    except:
-        st.markdown("Scaler is missing!")
 
     # Use model for prediction
-    prediction = st.session_state.model.predict(current_data)
+    prediction = prognose(df)
 
     # Display the result
     if st.session_state.choice_method == "Classification":
