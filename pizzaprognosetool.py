@@ -34,7 +34,6 @@ def prognose(df, choice_sensor, choice_method):
     elif choice_sensor == "VOC":
         # Name columns
         df.columns = ["Time", "Time2", "Humidity", "Temp", "Index_VOC", "Humidity2", "Temp2", "VOC"]
-        print("I was here!!!!!")
 
         # Filter the relevant data for CO2
         df = df[["Humidity", "Temp", "VOC"]]
@@ -48,6 +47,8 @@ def prognose(df, choice_sensor, choice_method):
             model = joblib.load(open('./models/rf_reg_voc.gz', 'rb'))
         else:
             st.markdown("Modeltyp was not selected")
+    else:
+        st.markdown("Fehler!")
 
     # Get last values
     current_data = df.tail(1)
