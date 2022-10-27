@@ -14,7 +14,6 @@ import joblib
 
 
 def prognose(df, choice_sensor, choice_method):
-    if choice_sensor == "CO2":
         # Name columns
         df.columns = ["Time", "Time2", "CO2", "Temp", "Humidity"]
 
