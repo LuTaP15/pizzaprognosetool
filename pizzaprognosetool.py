@@ -23,11 +23,11 @@ def prognose(df):
 
         # Load the prediction model
         if st.session_state.choice_method == "Klassifikation":
-            st.session_state.scaler = joblib.load(open('./models/scaler_rf_co2.gz', 'rb'))
-            st.session_state.model = joblib.load(open('./models/rf_co2.gz', 'rb'))
+            scaler = joblib.load(open('./models/scaler_rf_co2.gz', 'rb'))
+            model = joblib.load(open('./models/rf_co2.gz', 'rb'))
         elif st.session_state.choice_method == "Regression":
-            st.session_state.scaler = joblib.load(open('./models/scaler_rf_reg_co2.gz', 'rb'))
-            st.session_state.model = joblib.load(open('./models/rf_reg_co2.gz', 'rb'))
+            scaler = joblib.load(open('./models/scaler_rf_reg_co2.gz', 'rb'))
+            model = joblib.load(open('./models/rf_reg_co2.gz', 'rb'))
         else:
             st.markdown("Modeltyp was not selected")
 
@@ -40,11 +40,11 @@ def prognose(df):
 
         # Load the prediction model
         if st.session_state.choice_method == "Klassifikation":
-            st.session_state.scaler = joblib.load(open('./models/scaler_rf_voc.gz', 'rb'))
-            st.session_state.model = joblib.load(open('./models/rf_voc.gz', 'rb'))
+            scaler = joblib.load(open('./models/scaler_rf_voc.gz', 'rb'))
+            model = joblib.load(open('./models/rf_voc.gz', 'rb'))
         elif st.session_state.choice_method == "Regression":
-            st.session_state.scaler = joblib.load(open('./models/scaler_rf_reg_voc.gz', 'rb'))
-            st.session_state.model = joblib.load(open('./models/rf_reg_voc.gz', 'rb'))
+            scaler = joblib.load(open('./models/scaler_rf_reg_voc.gz', 'rb'))
+            model = joblib.load(open('./models/rf_reg_voc.gz', 'rb'))
         else:
             st.markdown("Modeltyp was not selected")
 
@@ -53,12 +53,12 @@ def prognose(df):
 
     # Fit current data with scaler from the model
     try:
-        st.session_state.scaler.fit(current_data)
+        scaler.fit(current_data)
     except:
         st.markdown("Scaler is missing!")
 
     # Use model for prediction
-    prediction = st.session_state.model.predict(current_data)
+    prediction = model.predict(current_data)
 
     return prediction
 
