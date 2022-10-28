@@ -82,8 +82,8 @@ if start_prognose and st.session_state.file_uploaded:
 
     # Display the result
     if st.session_state.choice_method == "Klassifikation":
-        st.markdown("Sie haben sich für das Verfahren Klassifikation entschieden! "
-                    "Das heißt das Model sagt Ihnen in welchem der drei Zustände sich die Pizza befindet. "
+        st.markdown("Sie haben sich für das Verfahren Klassifikation entschieden!")
+        st.markdown("Das heißt das Model sagt Ihnen in welchem der drei Zustände sich die Pizza befindet."
                     "- E für essbar,"
                     "- N für nicht essbar,"
                     "- U für undefiniert")
