@@ -18,6 +18,8 @@ st.session_state.choice_sensor = st.radio("Welchen Sensor wollen Sie verwenden?"
 st.session_state.choice_method = st.radio("Welches Verfahren wollen Sie verwenden?",
                       ("Klassifikation", "Regression"), index=0)
 
+st.markdown("Bitte Laden Sie zunächst eine Datei hoch bevor Sie die Prognose starten!")
+
 uploaded_file = st.file_uploader("Wählen Sie Ihre Daten aus!", type=(["edf"]))
 if uploaded_file is not None:
     # Read file
@@ -85,14 +87,14 @@ if start_prognose and uploaded_file is not None:
         st.markdown("- U für undefiniert")
 
         if prediction.item(0) == "E":
-            st.write("Ihre Pizza ist noch essbar!")
+            st.write(f"Ihre Pizza hat den Zustand {prediction.item(0)} und ist noch essbar!")
         elif prediction.item(0) == "N":
-            st.write("Ihre Pizza ist leider nicht mehr essbar!")
+            st.write(f"Ihre Pizza hat den Zustand {prediction.item(0)} und ist leider nicht mehr essbar!")
         elif prediction.item(0) == "U":
-            st.write("Der Zustand Ihrer Pizza ist leider undefiniert und es kann keine Entscheidung getroffen werden!")
+            st.write(f"Der Zustand Ihrer Pizza ist {prediction.item(0)} und es kann somit keine Ausage getroffen werden!")
 
     elif st.session_state.choice_method == "Regression":
-        st.markdown("Die Ausgabe gibt die Tage an relativ zum Mindesthaltbarkeitsdatum.")
+        st.markdown("Die Ausgabe gibt die Tage relativ zum Mindesthaltbarkeitsdatum an.")
         if prediction.item(0) >= 0:
             st.write(f"Sie haben noch {prediction.item(0)} Tage bis zum Mindesthaltbarkeitsdatum!")
         elif prediction.item(0) < 0:
@@ -100,8 +102,6 @@ if start_prognose and uploaded_file is not None:
     else:
         st.markdown("Modeltyp wurde nicht ausgewählt!")
 
-elif uploaded_file is None:
-    st.markdown("Bitte laden zuerst einen Datensatz hoch!")
 
 
 
