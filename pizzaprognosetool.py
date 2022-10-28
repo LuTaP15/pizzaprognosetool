@@ -4,8 +4,6 @@ import pandas as pd
 import pickle
 import joblib
 
-st.session_state.file_uploaded = False
-
 st.title("Vorhersagetool")
 st.markdown("### Einleitung")
 st.markdown("Vorhersagetool für die Bestimmung der Haltbarkeit von Pizza. "
@@ -24,13 +22,11 @@ uploaded_file = st.file_uploader("Wählen Sie Ihre Daten aus!", type=(["edf"]))
 if uploaded_file is not None:
     # Read file
     df = pd.read_csv(uploaded_file, sep="\t", skiprows=9)
-    # File loaded
-    st.session_state.file_uploaded = True
 
 
 start_prognose = st.button("Starte Vorhersage")
 # Prognose
-if start_prognose and st.session_state.file_uploaded:
+if start_prognose and uploaded_file is not None:
 
     if st.session_state.choice_sensor == "CO2" and len(df.columns)==5:
         # Name columns
@@ -83,10 +79,11 @@ if start_prognose and st.session_state.file_uploaded:
     # Display the result
     if st.session_state.choice_method == "Klassifikation":
         st.markdown("Sie haben sich für das Verfahren Klassifikation entschieden!")
-        st.markdown("Das heißt das Model sagt Ihnen in welchem der drei Zustände sich die Pizza befindet."
-                    "- E für essbar,"
-                    "- N für nicht essbar,"
-                    "- U für undefiniert")
+        st.markdown("Das heißt das Model sagt Ihnen in welchem der drei Zustände sich die Pizza befindet.")
+        st.markdown("- E für essbar,")
+        st.markdown("- N für nicht essbar,")
+        st.markdown("- U für undefiniert")
+
         if prediction.item(0) == "E":
             st.write("Ihre Pizza ist noch essbar!")
         elif prediction.item(0) == "N":
@@ -102,7 +99,8 @@ if start_prognose and st.session_state.file_uploaded:
             st.write(f"Ihre Pizza ist bereits {prediction.item(0)} Tage über dem Mindesthaltbarkeitsdatum!")
     else:
         st.markdown("Modeltyp wurde nicht ausgewählt!")
-else:
+
+elif uploaded_file is None:
     st.markdown("Bitte laden zuerst einen Datensatz hoch!")
 
 
