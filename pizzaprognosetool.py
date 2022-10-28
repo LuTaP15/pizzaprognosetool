@@ -98,7 +98,7 @@ if start_prognose and uploaded_file is not None:
         if prediction.item(0) >= 0:
             st.write(f"Sie haben noch {prediction.item(0)} Tage bis zum Mindesthaltbarkeitsdatum!")
         elif prediction.item(0) < 0:
-            st.write(f"Ihre Pizza ist bereits {prediction.item(0)} Tage über dem Mindesthaltbarkeitsdatum!")
+            st.write(f"Ihre Pizza ist bereits {abs(prediction.item(0))} Tage über dem Mindesthaltbarkeitsdatum!")
     else:
         st.markdown("Modeltyp wurde nicht ausgewählt!")
 
