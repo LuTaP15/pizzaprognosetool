@@ -82,15 +82,26 @@ if start_prognose and st.session_state.file_uploaded:
 
     # Display the result
     if st.session_state.choice_method == "Klassifikation":
-        st.markdown("The possible outcomes are: E for eatable, N for not eatable and U for undefined!")
-        st.write(prediction.item(0))
+        st.markdown("Sie haben sich für das Verfahren Klassifikation entschieden! "
+                    "Das heißt das Model sagt Ihnen in welchem der drei Zustände sich die Pizza befindet. "
+                    "- E für essbar,"
+                    "- N für nicht essbar,"
+                    "- U für undefiniert")
+        if prediction.item(0) == "E":
+            st.write("Ihre Pizza ist noch essbar!")
+        elif prediction.item(0) == "N":
+            st.write("Ihre Pizza ist leider nicht mehr essbar!")
+        elif prediction.item(0) == "U":
+            st.write("Der Zustand Ihrer Pizza ist leider undefiniert und es kann keine Entscheidung getroffen werden!")
+
     elif st.session_state.choice_method == "Regression":
-        st.markdown("The outcome is the amount of days relative to the best-before-date. "
-              "E.g. 7 means you have 7 days before expiring. "
-              "-1 means you are already 1 day over the expiration. ")
-        st.write(prediction.item(0))
+        st.markdown("Die Ausgabe gibt die Tage an relativ zum Mindesthaltbarkeitsdatum.")
+        if prediction.item(0) >= 0:
+            st.write(f"Sie haben noch {prediction.item(0)} Tage bis zum Mindesthaltbarkeitsdatum!")
+        elif prediction.item(0) < 0:
+            st.write(f"Ihre Pizza ist bereits {prediction.item(0)} Tage über dem Mindesthaltbarkeitsdatum!")
     else:
-        st.markdown("Modeltyp was not selected")
+        st.markdown("Modeltyp wurde nicht ausgewählt!")
 else:
     st.markdown("Bitte laden zuerst einen Datensatz hoch!")
 
