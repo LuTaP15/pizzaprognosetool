@@ -4,6 +4,7 @@ import pandas as pd
 import pickle
 import joblib
 
+st.session_state.file_uploaded = False
 
 st.title("Vorhersagetool")
 st.markdown("### Einleitung")
@@ -19,15 +20,17 @@ st.session_state.choice_sensor = st.radio("Welchen Sensor wollen Sie verwenden?"
 st.session_state.choice_method = st.radio("Welches Verfahren wollen Sie verwenden?",
                       ("Klassifikation", "Regression"), index=0)
 
-uploaded_file = st.file_uploader("Wählen Sie Ihre Daten aus!")
+uploaded_file = st.file_uploader("Wählen Sie Ihre Daten aus!", type=(["edf"]))
 if uploaded_file is not None:
     # Read file
     df = pd.read_csv(uploaded_file, sep="\t", skiprows=9)
+    # File loaded
+    st.session_state.file_uploaded = True
 
 
 start_prognose = st.button("Starte Vorhersage")
 # Prognose
-if start_prognose:
+if start_prognose and st.session_state.file_uploaded:
 
     if st.session_state.choice_sensor == "CO2" and len(df.columns)==5:
         # Name columns
@@ -88,6 +91,8 @@ if start_prognose:
         st.write(prediction.item(0))
     else:
         st.markdown("Modeltyp was not selected")
+else:
+    st.markdown("Bitte laden zuerst einen Datensatz hoch!")
 
 
 
