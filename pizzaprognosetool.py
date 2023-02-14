@@ -103,6 +103,6 @@ if start_prognose and uploaded_file is not None:
         st.markdown("Modeltyp wurde nicht ausgewählt!")
 
 # Display copyright notice in the footer
-st.footer("Developed by Paul Wunderlich"
-          "Email: paul.wunderlich@th-owl.de"
+st.footer("Developed by Paul Wunderlich\n"
+          "Email: paul.wunderlich@th-owl.de\n"
           "Copyright © 2023 Paul Wunderlich inIT–Institute Industrial IT. All rights reserved.")
